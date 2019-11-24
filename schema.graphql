@@ -1,0 +1,79 @@
+weddings {
+  id
+  name
+  type
+  hosts {
+    id
+    type
+    name
+  }
+  guests {
+    id
+    name
+    host {}
+    family {}
+    attendingCeremony
+    attendingReception
+    inviteSent
+    saveTheDateSent
+    phone
+    email
+    rsvp
+    dietaryRequirements
+    tableNumber
+    Notes
+    thankYouSent
+    address {
+      id
+      postcode
+      address1
+      address2
+      country
+      city
+    }
+  }
+  finances {
+    id
+    budget
+    estimate
+    paidToDate
+    categories {
+      id
+      name
+      items {
+        id
+        name
+        estimate
+        quote
+        secured
+        amountPaid
+        finalPaymentDate
+        fullyPaid
+        totalCost
+        notes
+        category {}
+        supplier {}
+        payments {
+          item {}
+          notes
+          method
+          paidBy {} #party
+          date
+          amount
+        }
+      }
+    }
+  }
+  suppliers {
+    id
+    name
+    item {}
+    contacts {
+      id
+      name
+      notes
+      emails {}
+      phoneNumbers {}
+    }
+  }
+}
