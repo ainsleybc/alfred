@@ -8,7 +8,8 @@ const config: { [key: string]: Config } = {
       user: "alfred",
       password: "alfred",
       database: "alfred"
-    }
+    },
+    debug: true
   },
 
   production: {
