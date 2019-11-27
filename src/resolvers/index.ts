@@ -1,4 +1,4 @@
-import { events, createEvent } from "./Event";
+import { events, createEvent } from "./event";
 
 export const resolvers = {
   Query: {

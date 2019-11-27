@@ -1,18 +1,7 @@
-const fakeEvents = [
-  {
-    id: 3,
-    type: "WEDDING",
-    name: "First Wedding"
-  },
-  {
-    id: 4,
-    type: "WEDDING",
-    name: "Second Wedding"
-  }
-];
+import { event } from "../models";
 
-const events = () => fakeEvents;
+export const events = async () => await event.all();
 
-const createEvent = () => fakeEvents[0];
-
-export { events, createEvent };
+export const createEvent = () => {
+  // create something perhaps
+};

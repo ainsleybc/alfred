@@ -1,0 +1,20 @@
+---
+version: "3.1"
+services:
+  postgres:
+    image: postgres:12.1-alpine
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./volumes/postgres-data:/var/lib/postgresql/data
+      - ./postgres_setup.sh:/docker-entrypoint-initdb.d/postgres_setup.sh
+    environment:
+      POSTGRES_USER: alfred
+      POSTGRES_PASSWORD: alfred
+      POSTGRES_DB: alfred
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U alfred"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
