@@ -5,11 +5,23 @@ const config: { [key: string]: Config } = {
     client: "postgresql",
     connection: {
       host: "localhost",
+      port: 54327,
       user: "alfred",
       password: "alfred",
       database: "alfred"
     },
     debug: true
+  },
+
+  test: {
+    client: "postgresql",
+    connection: {
+      host: "localhost",
+      port: 54327,
+      user: "alfred",
+      password: "alfred",
+      database: "alfred_test"
+    }
   },
 
   production: {
@@ -24,9 +36,9 @@ const config: { [key: string]: Config } = {
       max: 10
     },
     migrations: {
-      tableName: "knex_migrations"
+      extension: "ts"
     }
   }
 };
 
-export default config;
+export = config;

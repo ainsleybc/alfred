@@ -1,4 +1,4 @@
-import { event } from "../models";
+import { event } from "../repo";
 
 export const events = () => event.all();
 

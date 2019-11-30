@@ -1,4 +1,4 @@
-import { db } from "../models/db";
+import { knex } from "./db";
 
 const fields = ["id", "name", "type", "date"];
 
@@ -10,11 +10,11 @@ interface Event {
 }
 
 export const all = () => {
-  return db.select().from<Event>("events");
+  return knex.select().from<Event>("events");
 };
 
 export const create = async (input: Event): Promise<Event[]> => {
-  const [createdEvent] = await db("events")
+  const [createdEvent] = await knex("events")
     .returning(fields)
     .insert(input);
 

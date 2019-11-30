@@ -6,8 +6,9 @@
   "author": "Ainsley Chang",
   "scripts": {
     "start": "nodemon -r dotenv/config src/server.ts",
-    "test": "jest",
-    "migrations": "knex migrate:latest"
+    "test": "jest --coverage",
+    "test:watch": "jest --watch --coverage",
+    "test:integration": "jest -c __tests__/jest.config.js"
   },
   "license": "ISC",
   "dependencies": {
@@ -18,8 +19,11 @@
     "pg": "^7.14.0"
   },
   "devDependencies": {
+    "@types/jest": "^24.0.23",
     "@types/node": "^12.12.14",
+    "jest": "^24.9.0",
     "nodemon": "^2.0.1",
+    "ts-jest": "^24.2.0",
     "ts-node": "^8.5.2",
     "typescript": "^3.7.2"
   }

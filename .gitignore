@@ -1,4 +1,10 @@
 node_modules
 
+# build files
+dist
+
+# test coverage
+coverage
+
 # dev data
 volumes
