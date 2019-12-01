@@ -10,6 +10,9 @@ const config: { [key: string]: Config } = {
       password: "alfred",
       database: "alfred"
     },
+    migrations: {
+      extension: "ts"
+    },
     debug: true
   },
 
@@ -34,9 +37,6 @@ const config: { [key: string]: Config } = {
     pool: {
       min: 2,
       max: 10
-    },
-    migrations: {
-      extension: "ts"
     }
   }
 };
