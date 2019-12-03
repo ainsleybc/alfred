@@ -10,24 +10,18 @@ const schemaFile = "./src/repo/db/structure.sql";
 const dropAndCreateSchema = async () => {
   await knex.raw("DROP SCHEMA IF EXISTS public CASCADE;");
   await knex.raw("CREATE SCHEMA public;");
-  console.log("\nDatabase schema recreated successfully");
 };
 
 const db = {
   restore: async () => {
     await dropAndCreateSchema();
     await knex.raw(fs.readFileSync(schemaFile).toString());
-    console.log(`Database restored from ${schemaFile}\n`);
+    console.log(`\nDatabase restored from ${schemaFile}\n`);
   },
 
-  clean: async () => {
-    await dropAndCreateSchema();
-  },
+  clean: async () => dropAndCreateSchema(),
 
-  disconnect: async () => {
-    await knex.destroy();
-    console.log("Disconnected from database\n");
-  }
+  disconnect: async () => knex.destroy()
 };
 
 export { knex, db };
