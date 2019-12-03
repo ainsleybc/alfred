@@ -24,7 +24,8 @@ const config: { [key: string]: Config } = {
       user: "alfred",
       password: "alfred",
       database: "alfred_test"
-    }
+    },
+    pool: { min: 1, max: 1 }
   },
 
   production: {

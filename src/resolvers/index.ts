@@ -9,7 +9,7 @@ export const resolvers = {
     name: "Date",
     description: "Date custom scalar type",
     parseValue: parseDate,
-    serialize: value => new Date(value),
+    serialize: value => new Date(value).toISOString(),
     parseLiteral: ast => {
       if (ast.kind === Kind.STRING) {
         return parseDate((ast.value as unknown) as string);

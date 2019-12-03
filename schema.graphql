@@ -1,6 +1,9 @@
-weddings {
+# pseudo schema. This is really just notes for myself
+
+events {
   id
   name
+  date
   type
   hosts {
     id

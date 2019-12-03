@@ -18,13 +18,13 @@ export const typeDefs = gql`
     events: [Event]
   }
 
-  input EventInput {
+  input CreateEventInput {
     name: String
     type: EventType
     date: Date
   }
 
   type Mutation {
-    createEvent(input: EventInput): Event
+    createEvent(input: CreateEventInput): Event
   }
 `;
