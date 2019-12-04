@@ -1,13 +1,17 @@
-import {} from "apollo-server";
+import { GraphQLFieldResolver } from "graphql";
 import { event } from "../repo";
 
-export const events = (): Promise<event.Event[]> => {
+type CreateEventArgs = {
+  input: { name: string; type: string; date?: string };
+};
+
+export const events: GraphQLFieldResolver<{}, {}> = (): Promise<event.Event[]> => {
   return event.all();
 };
 
-export const createEvent = (
-  _parent: {},
-  { input }: { input: event.Event },
+export const createEvent: GraphQLFieldResolver<{}, {}, CreateEventArgs> = (
+  _parent,
+  { input },
 ): Promise<event.Event> => {
   return event.create(input);
 };

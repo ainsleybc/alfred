@@ -11,13 +11,12 @@ module.exports = {
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "prettier",
     "prettier/@typescript-eslint",
+    "plugin:prettier/recommended"
   ],
   rules: {
     "@typescript-eslint/explicit-function-return-type": "error",
     "@typescript-eslint/no-explicit-any": "error",
     "@typescript-eslint/no-unused-vars": "error",
-    "arrow-parens": ["error", "always"],
-    "comma-dangle": ["error", "always-multiline"],
   },
   env: {
     node: true,

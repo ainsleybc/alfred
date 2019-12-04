@@ -1,5 +1,4 @@
 {
   "eslint.validate": ["javascript", "typescript"],
-  "prettier.trailingComma": "all",
-  "prettier.arrowParens": "always"
+  "editor.rulers": [120]
 }

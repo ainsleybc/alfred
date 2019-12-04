@@ -9,11 +9,17 @@ export type Event = {
   date?: string;
 };
 
+type CreateInput = {
+  name: string;
+  type: string;
+  date?: string;
+};
+
 export const all = async (): Promise<Event[]> => {
   return knex.select().from<Event>(Table.event);
 };
 
-export const create = async (input: Event): Promise<Event> => {
+export const create = async (input: CreateInput): Promise<Event> => {
   const [createdEvent] = await knex(Table.event)
     .returning(fields)
     .insert(input);
