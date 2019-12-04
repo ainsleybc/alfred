@@ -8,12 +8,13 @@ const config: { [key: string]: Config } = {
       port: 54327,
       user: "alfred",
       password: "alfred",
-      database: "alfred"
+      database: "alfred",
     },
     migrations: {
-      extension: "ts"
+      extension: "ts",
+      stub: "migrations/migration.stub",
     },
-    debug: true
+    debug: true,
   },
 
   test: {
@@ -23,9 +24,9 @@ const config: { [key: string]: Config } = {
       port: 54327,
       user: "alfred",
       password: "alfred",
-      database: "alfred_test"
+      database: "alfred_test",
     },
-    pool: { min: 1, max: 1 }
+    pool: { min: 1, max: 1 },
   },
 
   production: {
@@ -33,13 +34,13 @@ const config: { [key: string]: Config } = {
     connection: {
       database: "",
       user: "",
-      password: ""
+      password: "",
     },
     pool: {
       min: 2,
-      max: 10
-    }
-  }
+      max: 10,
+    },
+  },
 };
 
 export = config;

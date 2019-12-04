@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as Knex from "knex";
 
 export async function up(knex: Knex): Promise<any> {
-  await knex.schema.createTable("events", t => {
+  await knex.schema.createTable("events", (t) => {
     t.comment("An event (wedding, birthday party)");
     t.increments("id")
       .unsigned()
@@ -9,7 +10,7 @@ export async function up(knex: Knex): Promise<any> {
     t.string("name").notNullable();
     t.enu("type", ["WEDDING"], {
       useNative: true,
-      enumName: "event_type"
+      enumName: "event_type",
     }).notNullable();
     t.date("date");
   });

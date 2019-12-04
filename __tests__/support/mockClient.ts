@@ -8,7 +8,7 @@ import { context } from "../../src/context";
 const testServer = new ApolloServer({
   typeDefs,
   resolvers,
-  context
+  context,
 });
 
 const { mutate, query } = createTestClient(testServer);

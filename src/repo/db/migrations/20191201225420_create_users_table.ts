@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as Knex from "knex";
 
 export async function up(knex: Knex): Promise<any> {
-  await knex.schema.createTable("users", table => {
+  await knex.schema.createTable("users", (table) => {
     table.comment("A user");
     table
       .increments("id")
@@ -15,7 +16,7 @@ export async function up(knex: Knex): Promise<any> {
     table.unique(["auth0_id"]);
   });
 
-  await knex.schema.createTable("events_users", table => {
+  await knex.schema.createTable("events_users", (table) => {
     table
       .increments("id")
       .unsigned()
@@ -36,7 +37,7 @@ export async function up(knex: Knex): Promise<any> {
     table.unique(["event_id", "user_id"]);
   });
 
-  await knex.schema.alterTable("events", table => {
+  await knex.schema.alterTable("events", (table) => {
     table.timestamps(false);
     // text is better than string (char)
     table
@@ -49,7 +50,7 @@ export async function up(knex: Knex): Promise<any> {
 export async function down(knex: Knex): Promise<any> {
   await knex.schema.dropTableIfExists("events_users");
   await knex.schema.dropTableIfExists("users");
-  await knex.schema.table("events", table => {
+  await knex.schema.table("events", (table) => {
     table.dropTimestamps();
   });
 }

@@ -1,6 +1,6 @@
 import * as event from "./event";
 
-export type Insert = (args: object) => Promise<number[]>;
+export type Insert = (args: object) => Promise<number>;
 
 interface Factory {
   [key: string]: {
@@ -9,8 +9,9 @@ interface Factory {
 }
 
 const factory: Factory = {
-  event
+  event,
 };
 
-export const insert = (table: string, args: object) =>
-  factory[table].insert(args);
+export const insert = (table: string, args: object): Promise<number> => {
+  return factory[table].insert(args);
+};

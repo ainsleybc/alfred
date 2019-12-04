@@ -19,7 +19,7 @@ describe("createEvent", () => {
     const input = {
       name: "foo",
       type: "WEDDING",
-      date: "2019-12-25"
+      date: "2019-12-25",
     };
 
     const res = await mutate({ mutation, variables: { input } });
