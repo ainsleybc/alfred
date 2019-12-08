@@ -1,16 +1,15 @@
-import { ApolloServer } from "apollo-server";
-import { createTestClient } from "apollo-server-testing";
+import { ApolloServer, ApolloServerExpressConfig } from "apollo-server-express";
+import { createTestClient, ApolloServerTestClient } from "apollo-server-testing";
 
 import { resolvers } from "../../src/resolvers";
 import { typeDefs } from "../../src/schema";
-import { context } from "../../src/context";
 
-const testServer = new ApolloServer({
-  typeDefs,
-  resolvers,
-  context,
-});
+export const mockClient = (opts: ApolloServerExpressConfig = {}): ApolloServerTestClient => {
+  const testServer = new ApolloServer({
+    typeDefs,
+    resolvers,
+    ...opts,
+  });
 
-const { mutate, query } = createTestClient(testServer);
-
-export { mutate, query };
+  return createTestClient(testServer);
+};

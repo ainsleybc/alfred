@@ -1,5 +1,7 @@
-import { gql } from "apollo-server";
-import { mutate } from "./support/mockClient";
+import { gql } from "apollo-server-express";
+import { mockClient } from "./support/mockClient";
+import { insert } from "./factories";
+import { Account } from "../src/models/account";
 
 import("./support/transactionalTestCase");
 
@@ -22,6 +24,8 @@ describe("createEvent", () => {
       date: "2019-12-25",
     };
 
+    const account = await insert<Account>("account");
+    const { mutate } = mockClient({ context: () => ({ user: account }) });
     const res = await mutate({ mutation, variables: { input } });
     const createdEvent = res.data?.createEvent;
 

@@ -9,3 +9,6 @@ coverage
 
 # dev data
 volumes
+
+# log files
+yarn-error.log

@@ -2,6 +2,7 @@
   "include": ["src/**/*.ts", "**/*.js"],
   "exclude": ["node_modules"],
   "compilerOptions": {
+    "typeRoots": ["./node_modules/@types", "./typings"],
     "target": "es5",
     "module": "commonjs",
     "lib": ["dom", "es6"],
@@ -12,7 +13,6 @@
     "strict": true,
     "noImplicitAny": true,
     "noUnusedLocals": true,
-    "noEmitOnError": true,
     "noUnusedParameters": true,
     "moduleResolution": "node",
     "esModuleInterop": true,

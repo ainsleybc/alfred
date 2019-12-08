@@ -1,13 +1,7 @@
 import { knex, Table } from "./db";
+import { Event, Account } from "../models";
 
-const fields = ["id", "name", "type", "date"];
-
-export type Event = {
-  id: number;
-  name: string;
-  type: string;
-  date?: string;
-};
+const fields = ["id", "name", "type", "date", "createdBy"];
 
 type CreateInput = {
   name: string;
@@ -15,14 +9,21 @@ type CreateInput = {
   date?: string;
 };
 
-export const all = async (): Promise<Event[]> => {
-  return knex.select().from<Event>(Table.event);
+const all = async (id: number): Promise<Event[]> => {
+  return knex
+    .where({ id })
+    .select()
+    .from<Event>(Table.event);
 };
 
-export const create = async (input: CreateInput): Promise<Event> => {
+const create = async (input: CreateInput, account: Account): Promise<Event> => {
   const [createdEvent] = await knex(Table.event)
     .returning(fields)
-    .insert(input);
+    .insert({ ...input, createdBy: account.id });
+
+  await knex(Table.eventsAccounts).insert({ eventId: createdEvent.id, accountId: account.id });
 
   return createdEvent;
 };
+
+export { create, all };

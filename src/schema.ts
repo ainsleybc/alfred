@@ -1,4 +1,4 @@
-import { gql } from "apollo-server";
+import { gql } from "apollo-server-express";
 
 export const typeDefs = gql`
   scalar Date
@@ -15,7 +15,7 @@ export const typeDefs = gql`
   }
 
   type Query {
-    events: [Event]
+    account: Account
   }
 
   input CreateEventInput {
@@ -26,5 +26,12 @@ export const typeDefs = gql`
 
   type Mutation {
     createEvent(input: CreateEventInput): Event
+  }
+
+  type Account {
+    id: ID!
+    name: String
+    email: String
+    events: [Event]
   }
 `;

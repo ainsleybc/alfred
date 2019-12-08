@@ -1,10 +1,14 @@
 import connect from "knex";
-import config from "./knexfile";
+import stringCase from "knex-stringcase";
+import knexConfig from "./knexfile";
+import { config } from "../../config";
 
 // So we don't have to use magic strings everywhere we reference a table
 export enum Table {
   event = "events",
-  user = "users",
+  account = "accounts",
+  eventsAccounts = "events_accounts",
 }
 
-export const knex = connect(config[process.env.NODE_ENV || "development"]);
+// Use knex-stringcase so we can use camelCase in code and snake_case in db because postgres
+export const knex = connect(stringCase(knexConfig[config.env || "development"]));

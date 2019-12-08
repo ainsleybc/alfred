@@ -1,6 +1,7 @@
 import { GraphQLScalarType } from "graphql";
 import { Kind } from "graphql/language";
 import { events, createEvent } from "./event";
+import { account } from "./account";
 
 const parseDate = (date: string): string => {
   return new Date(date).toISOString().split("T")[0];
@@ -20,9 +21,12 @@ export const resolvers = {
     },
   }),
   Query: {
-    events,
+    account,
   },
   Mutation: {
     createEvent,
+  },
+  Account: {
+    events,
   },
 };

@@ -1,6 +1,8 @@
 import * as event from "./event";
+import * as account from "./account";
 
-export type Insert = (args: object) => Promise<number>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type Insert = (args?: any) => Promise<object>;
 
 interface Factory {
   [key: string]: {
@@ -10,8 +12,9 @@ interface Factory {
 
 const factory: Factory = {
   event,
+  account,
 };
 
-export const insert = (table: string, args: object): Promise<number> => {
-  return factory[table].insert(args);
-};
+export function insert<T>(table: string, args?: object): Promise<T> {
+  return (factory[table].insert(args) as unknown) as Promise<T>;
+}

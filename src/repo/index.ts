@@ -1,4 +1,4 @@
 import * as event from "./event";
-import * as user from "./user";
+import * as account from "./account";
 
-export { event, user };
+export { event, account };

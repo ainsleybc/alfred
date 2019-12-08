@@ -30,6 +30,51 @@ ALTER TYPE public.event_type OWNER TO alfred;
 SET default_tablespace = '';
 
 --
+-- Name: accounts; Type: TABLE; Schema: public; Owner: alfred
+--
+
+CREATE TABLE public.accounts (
+    id integer NOT NULL,
+    auth0_id text NOT NULL,
+    email text NOT NULL,
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone,
+    name text NOT NULL,
+    email_verified boolean DEFAULT false NOT NULL
+);
+
+
+ALTER TABLE public.accounts OWNER TO alfred;
+
+--
+-- Name: TABLE accounts; Type: COMMENT; Schema: public; Owner: alfred
+--
+
+COMMENT ON TABLE public.accounts IS 'A user account';
+
+
+--
+-- Name: accounts_id_seq; Type: SEQUENCE; Schema: public; Owner: alfred
+--
+
+CREATE SEQUENCE public.accounts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.accounts_id_seq OWNER TO alfred;
+
+--
+-- Name: accounts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: alfred
+--
+
+ALTER SEQUENCE public.accounts_id_seq OWNED BY public.accounts.id;
+
+
+--
 -- Name: events; Type: TABLE; Schema: public; Owner: alfred
 --
 
@@ -39,7 +84,8 @@ CREATE TABLE public.events (
     type public.event_type NOT NULL,
     date date,
     created_at timestamp with time zone,
-    updated_at timestamp with time zone
+    updated_at timestamp with time zone,
+    created_by integer NOT NULL
 );
 
 
@@ -50,6 +96,42 @@ ALTER TABLE public.events OWNER TO alfred;
 --
 
 COMMENT ON TABLE public.events IS 'An event (wedding, birthday party)';
+
+
+--
+-- Name: events_accounts; Type: TABLE; Schema: public; Owner: alfred
+--
+
+CREATE TABLE public.events_accounts (
+    id integer NOT NULL,
+    event_id integer,
+    account_id integer,
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone
+);
+
+
+ALTER TABLE public.events_accounts OWNER TO alfred;
+
+--
+-- Name: events_accounts_id_seq; Type: SEQUENCE; Schema: public; Owner: alfred
+--
+
+CREATE SEQUENCE public.events_accounts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.events_accounts_id_seq OWNER TO alfred;
+
+--
+-- Name: events_accounts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: alfred
+--
+
+ALTER SEQUENCE public.events_accounts_id_seq OWNED BY public.events_accounts.id;
 
 
 --
@@ -71,42 +153,6 @@ ALTER TABLE public.events_id_seq OWNER TO alfred;
 --
 
 ALTER SEQUENCE public.events_id_seq OWNED BY public.events.id;
-
-
---
--- Name: events_users; Type: TABLE; Schema: public; Owner: alfred
---
-
-CREATE TABLE public.events_users (
-    id integer NOT NULL,
-    event_id integer,
-    user_id integer,
-    created_at timestamp with time zone,
-    updated_at timestamp with time zone
-);
-
-
-ALTER TABLE public.events_users OWNER TO alfred;
-
---
--- Name: events_users_id_seq; Type: SEQUENCE; Schema: public; Owner: alfred
---
-
-CREATE SEQUENCE public.events_users_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.events_users_id_seq OWNER TO alfred;
-
---
--- Name: events_users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: alfred
---
-
-ALTER SEQUENCE public.events_users_id_seq OWNED BY public.events_users.id;
 
 
 --
@@ -178,46 +224,10 @@ ALTER SEQUENCE public.knex_migrations_lock_index_seq OWNED BY public.knex_migrat
 
 
 --
--- Name: users; Type: TABLE; Schema: public; Owner: alfred
+-- Name: accounts id; Type: DEFAULT; Schema: public; Owner: alfred
 --
 
-CREATE TABLE public.users (
-    id integer NOT NULL,
-    auth0_id text NOT NULL,
-    email text NOT NULL,
-    created_at timestamp with time zone,
-    updated_at timestamp with time zone
-);
-
-
-ALTER TABLE public.users OWNER TO alfred;
-
---
--- Name: TABLE users; Type: COMMENT; Schema: public; Owner: alfred
---
-
-COMMENT ON TABLE public.users IS 'A user';
-
-
---
--- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: alfred
---
-
-CREATE SEQUENCE public.users_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.users_id_seq OWNER TO alfred;
-
---
--- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: alfred
---
-
-ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
+ALTER TABLE ONLY public.accounts ALTER COLUMN id SET DEFAULT nextval('public.accounts_id_seq'::regclass);
 
 
 --
@@ -228,10 +238,10 @@ ALTER TABLE ONLY public.events ALTER COLUMN id SET DEFAULT nextval('public.event
 
 
 --
--- Name: events_users id; Type: DEFAULT; Schema: public; Owner: alfred
+-- Name: events_accounts id; Type: DEFAULT; Schema: public; Owner: alfred
 --
 
-ALTER TABLE ONLY public.events_users ALTER COLUMN id SET DEFAULT nextval('public.events_users_id_seq'::regclass);
+ALTER TABLE ONLY public.events_accounts ALTER COLUMN id SET DEFAULT nextval('public.events_accounts_id_seq'::regclass);
 
 
 --
@@ -249,10 +259,43 @@ ALTER TABLE ONLY public.knex_migrations_lock ALTER COLUMN index SET DEFAULT next
 
 
 --
--- Name: users id; Type: DEFAULT; Schema: public; Owner: alfred
+-- Name: accounts accounts_auth0_id_unique; Type: CONSTRAINT; Schema: public; Owner: alfred
 --
 
-ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+ALTER TABLE ONLY public.accounts
+    ADD CONSTRAINT accounts_auth0_id_unique UNIQUE (auth0_id);
+
+
+--
+-- Name: accounts accounts_email_unique; Type: CONSTRAINT; Schema: public; Owner: alfred
+--
+
+ALTER TABLE ONLY public.accounts
+    ADD CONSTRAINT accounts_email_unique UNIQUE (email);
+
+
+--
+-- Name: accounts accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: alfred
+--
+
+ALTER TABLE ONLY public.accounts
+    ADD CONSTRAINT accounts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: events_accounts events_accounts_event_id_account_id_unique; Type: CONSTRAINT; Schema: public; Owner: alfred
+--
+
+ALTER TABLE ONLY public.events_accounts
+    ADD CONSTRAINT events_accounts_event_id_account_id_unique UNIQUE (event_id, account_id);
+
+
+--
+-- Name: events_accounts events_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: alfred
+--
+
+ALTER TABLE ONLY public.events_accounts
+    ADD CONSTRAINT events_accounts_pkey PRIMARY KEY (id);
 
 
 --
@@ -261,22 +304,6 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 ALTER TABLE ONLY public.events
     ADD CONSTRAINT events_pkey PRIMARY KEY (id);
-
-
---
--- Name: events_users events_users_event_id_user_id_unique; Type: CONSTRAINT; Schema: public; Owner: alfred
---
-
-ALTER TABLE ONLY public.events_users
-    ADD CONSTRAINT events_users_event_id_user_id_unique UNIQUE (event_id, user_id);
-
-
---
--- Name: events_users events_users_pkey; Type: CONSTRAINT; Schema: public; Owner: alfred
---
-
-ALTER TABLE ONLY public.events_users
-    ADD CONSTRAINT events_users_pkey PRIMARY KEY (id);
 
 
 --
@@ -296,57 +323,41 @@ ALTER TABLE ONLY public.knex_migrations
 
 
 --
--- Name: users users_auth0_id_unique; Type: CONSTRAINT; Schema: public; Owner: alfred
+-- Name: events_accounts_account_id_index; Type: INDEX; Schema: public; Owner: alfred
 --
 
-ALTER TABLE ONLY public.users
-    ADD CONSTRAINT users_auth0_id_unique UNIQUE (auth0_id);
-
-
---
--- Name: users users_email_unique; Type: CONSTRAINT; Schema: public; Owner: alfred
---
-
-ALTER TABLE ONLY public.users
-    ADD CONSTRAINT users_email_unique UNIQUE (email);
+CREATE INDEX events_accounts_account_id_index ON public.events_accounts USING btree (account_id);
 
 
 --
--- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: alfred
+-- Name: events_accounts_event_id_index; Type: INDEX; Schema: public; Owner: alfred
 --
 
-ALTER TABLE ONLY public.users
-    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
-
-
---
--- Name: events_users_event_id_index; Type: INDEX; Schema: public; Owner: alfred
---
-
-CREATE INDEX events_users_event_id_index ON public.events_users USING btree (event_id);
+CREATE INDEX events_accounts_event_id_index ON public.events_accounts USING btree (event_id);
 
 
 --
--- Name: events_users_user_id_index; Type: INDEX; Schema: public; Owner: alfred
+-- Name: events_accounts events_accounts_account_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: alfred
 --
 
-CREATE INDEX events_users_user_id_index ON public.events_users USING btree (user_id);
-
-
---
--- Name: events_users events_users_event_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: alfred
---
-
-ALTER TABLE ONLY public.events_users
-    ADD CONSTRAINT events_users_event_id_foreign FOREIGN KEY (event_id) REFERENCES public.events(id);
+ALTER TABLE ONLY public.events_accounts
+    ADD CONSTRAINT events_accounts_account_id_foreign FOREIGN KEY (account_id) REFERENCES public.accounts(id);
 
 
 --
--- Name: events_users events_users_user_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: alfred
+-- Name: events_accounts events_accounts_event_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: alfred
 --
 
-ALTER TABLE ONLY public.events_users
-    ADD CONSTRAINT events_users_user_id_foreign FOREIGN KEY (user_id) REFERENCES public.users(id);
+ALTER TABLE ONLY public.events_accounts
+    ADD CONSTRAINT events_accounts_event_id_foreign FOREIGN KEY (event_id) REFERENCES public.events(id);
+
+
+--
+-- Name: events events_created_by_foreign; Type: FK CONSTRAINT; Schema: public; Owner: alfred
+--
+
+ALTER TABLE ONLY public.events
+    ADD CONSTRAINT events_created_by_foreign FOREIGN KEY (created_by) REFERENCES public.accounts(id);
 
 
 --

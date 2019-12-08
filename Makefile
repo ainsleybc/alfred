@@ -11,7 +11,8 @@ psql:
 migrate: migrate_latest pg_dump
 
 migrate_latest:
-	knex migrate:latest --cwd src/repo/db/
+	# run with npm so we can leverage dotenv for env vars
+	npm run knex -- migrate:latest --cwd src/repo/db/
 
 pg_dump:
 	pg_dump postgres://alfred:alfred@127.0.0.1:54327/alfred -s -f src/repo/db/structure.sql
